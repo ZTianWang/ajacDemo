@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+		<script type="text/javascript" src="js/jquery-form.js" ></script>
+		<!--<script type="text/javascript" src="js/jquery.form.min.js.js" ></script>-->
+		<script type="text/javascript">
+			$(function(){
+				
+				$('#btn').click(function(e){
+					$('#form').submit(function(e){
+						var options={
+							url:"GetToXMLTestServlet",
+							type:"get",
+							dataType:"xml",
+							resetForm:true, /*提交表单成功后重置表单 */
+							data:{
+								aa:11,bb:22
+							},
+							beforeSubmit:function(){
+		//						提交之前执行,一般用于数据验证,若数据验证不合法则返回false.
+							},
+							success:function(data,textStatus){
+								alert("btn:"+textStatus);
+								var uname=$(data).find("name").text();
+								var psw=$(data).find("psw").text();
+								$("#box").html("<p>用户名："+uname+"，密码"+psw+"</p>");
+							},
+							error:function(data,textStatus){
+								alert(textStatus);
+							},
+							complete:function(){
+								/* unbind():移除被选元素的事件处理;
+									本处由于同一个form有多个提交路径，所以用于移除form绑定的当前submit事件 */
+								$('#form').unbind();
+							},
+						}
+	//					alert(1);
+						$(this).ajaxSubmit(options);
+						e.preventDefault();
+						/* e.unbind(); */
+					});
+					$('#form').submit();
+				});
+				
+				$('#btn1').click(function(e){
+					$('#form').submit(function(e){
+						var options={
+							url:"GetToXMLTestServlet",
+							type:"get",
+							dataType:"xml",
+							resetForm:true, /*提交表单成功后重置表单 */
+							data:{
+								aa:11,bb:22
+							},
+							beforeSubmit:function(){
+		//						提交之前执行,一般用于数据验证,若数据验证不合法则返回false.
+							},
+							success:function(data,textStatus){
+								alert("btn1:"+textStatus);
+								var uname=$(data).find("name").text();
+								var psw=$(data).find("psw").text();
+								$("#box").html("<p>fun2:</p><p>用户名："+uname+"，密码"+psw+"</p>");
+							},
+							error:function(data,textStatus){
+								alert(textStatus);
+							},
+							complete:function(){
+								$('#form').unbind();
+							},
+						}
+						$(this).ajaxSubmit(options);
+						e.preventDefault();
+					});
+					$('#form').submit();
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<form id="form" action="">
+			用户名：<input type="text" name="uname" id="uname" value="请输入" /><br />
+			密码：<input type="password" name="psw" id="psw" value="" /><br />
+		</form>
+			<input id="btn" type="button" value="btn"/>
+			<input id="btn1" type="button" value="btn1"/>
+		<div id="box">
+		</div>
+	</body>
+</html>

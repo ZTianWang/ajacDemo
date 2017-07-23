@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+		<script type="text/javascript" src="js/jquery-form.js" ></script>
+		<!--<script type="text/javascript" src="js/jquery.form.min.js.js" ></script>-->
+		<script type="text/javascript">
+			$(function(){
+				
+				$('#form').ajaxForm({
+						url:"GetToXMLTestServlet",
+						dataType:"xml",
+						resetForm:true, /*提交表单成功后重置表单 */
+						data:{
+							aa:11,bb:22
+						},
+						beforeSubmit:function(){
+//							提交之前执行,一般用于数据验证,若数据验证不合法则返回false.
+						},
+						success:function(data,textStatus){
+							alert(textStatus);
+							var uname=$(data).find("name").text();
+							var psw=$(data).find("psw").text();
+							$("#box").html("<p>用户名："+uname+"，密码"+psw+"</p>");
+						},
+						error:function(data,textStatus){
+							alert(textStatus);
+						},
+					})
+				
+//				$('#form').ajaxForm(function(){
+////					此function()相当于ajax提交成功后的success function()
+//						alert("提交成功");
+//				});
+//				使用ajaxForm()方法会直接实现ajax提交.自动阻止了默认行为,它提交的页面
+//			是form控件的action值,提交的方法是method属性的值
+				
+//				当js用了submit()方法时,采用ajaxSubmit()
+//				不阻止默认提交,若不跳转页面需return false
+//				$("#form").submit(function(){
+////					$(this).ajaxSubmit(function(){  /* 这里的function()也相当于ajax提交成功后的success function() */
+////						alert("成功");
+////					});
+////					option参数:
+//					$(this).ajaxSubmit({
+//						url:"GetToXMLTestServlet",
+//						dataType:"xml",
+//						resetForm:true, /*提交表单成功后重置表单 */
+//						data:{
+//							aa:11,bb:22
+//						},
+//						beforeSubmit:function(){
+////							提交之前执行,一般用于数据验证,若数据验证不合法则返回false.
+//						},
+//						success:function(data,textStatus){
+//							alert(textStatus);
+//							var uname=$(data).find("name").text();
+//							var psw=$(data).find("psw").text();
+//							$("#box").html("<p>用户名："+uname+"，密码"+psw+"</p>");
+//						},
+//						error:function(data,textStatus){
+//							alert(textStatus);
+//						},
+//					});
+//					return false;
+//				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<form id="form" action="" method="get">
+			用户名：<input type="text" name="uname" id="uname" value="请输入" /><br />
+			密码：<input type="password" name="psw" id="psw" value="" /><br />
+			<input id="btn" type="submit" value="login"/>
+		</form>
+		<div id="box">
+		</div>
+	</body>
+</html>

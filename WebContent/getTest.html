@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>test get</title>
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+		<script language="JavaScript">
+			$(function(){ 
+				$("#btn1").click(function(){
+				/*	get方法:$.get(url,[date],[callback],[type])
+						参数:url:请求的url地址;
+							 date:发送给服务器的key/value数据附加到url后
+							 callback:载入成功时的回调函数
+							 type:服务器返回的内容格式,包括xml,html,json,test等;不写默认为html */
+					$.get("GetTestServlet",
+//							防止中文乱码,先用encodeURI()方法将数据val值编码
+							{'uname':encodeURI($('#uname1').val()),
+							 'psw':encodeURI($('#psw1').val())},
+							function(data,textStatus){
+								/* 若弹出框则表示响应成功 */
+								alert(textStatus);
+								$("#content1").html(data);
+							});
+				});
+				
+				$("#btn2").click(function(){
+					$.get("GetToXMLTestServlet",
+							{'uname':encodeURI($('#uname2').val()),
+							 'psw':encodeURI($('#psw2').val())},
+							function(data,textStatus){  /*此时date格式为xml格式*/
+								alert(textStatus);
+//								查找节点的内容
+								var uname=$(data).find("name").text();
+								var psw=$(data).find("psw").text();
+								$("#content2").html("<p>用户名："+uname+"，密码"+psw+"</p>");
+							},"xml");
+				});
+				
+				$("#btn3").click(function(){
+					$.get("GetToJSONTestServlet",
+							function(data,textStatus){  /*此时date格式为json格式*/
+								alert(textStatus);
+								var students=data.students;
+								var res="<ul>\n";
+								for (var i = 0; i < students.length; i++) {
+									var student=students[i];
+									res+="<li>"+student.name+"--"+student.age+"</li>\n";
+								}
+								res+="</ul>";
+								$(res).appendTo($("#content3"));
+							},"json");
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="a">
+			返回html格式数据：<br />
+			用户名：<input type="text" name="uname1" id="uname1" value="" /><br />
+			密码：<input type="password" name="psw1" id="psw1" value="" />
+			<input type="button" id="btn1" value="login" />
+			<div id="content1"></div>
+		</div><hr />
+		<div id="b">
+			返回xml格式数据：<br />
+			用户名：<input type="text" name="uname2" id="uname2" value="" /><br />
+			密码：<input type="password" name="psw2" id="psw2" value="" />
+			<input type="button" id="btn2" value="submit" />
+			<div id="content2"></div>
+		</div><hr />
+		<div id="c">
+			返回json格式数据：<br />
+			<input type="button" id="btn3" value="getJSON" />
+			<div id="content3"></div>
+		</div><hr />
+	</body>
+</html>
